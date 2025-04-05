@@ -1,0 +1,31 @@
+struct segtree{
+    vector<int> t;
+    int N;
+    segtree(vi &x){
+        N = x.size();
+        t.assign(4 * N, 0);
+        build(0, N-1, 1, x);
+    }
+    void build(int dd, int ht, int no, vi &x){
+        if(dd == ht){
+            t[no] = x[dd];
+            return;
+        }
+        int m = (dd + ht) / 2;
+        build(dd, m, 2 * no, x);
+        build(m+1, ht, 2 * no + 1, x);
+        t[no] = t[2*no] ^ t[2 * no + 1];
+    }
+    int query(int dd, int ht, int no, int l, int r){
+        if(l == dd && r == ht){
+            return t[no];
+        }
+        int mid = (dd + ht) / 2;
+        if(r <= mid){
+            return query(dd, mid, 2 * no, l, r);
+        }else if(l > mid){
+            return query(mid+1, ht, 2 * no+1, l, r);
+        }
+        return query(dd, mid, 2*no, l, mid) ^ query(mid+1, ht, 2*no + 1, mid+1, r);
+    }
+};
