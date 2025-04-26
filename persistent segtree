@@ -1,0 +1,90 @@
+struct node{
+    node *l, *r;
+    ll val;
+    node(ll x){
+        val = x;
+        l = nullptr;
+        r = nullptr;
+    }
+    node(node *cp){
+        val = cp->val;
+        l = cp->l;
+        r = cp->r;
+    }
+    node(node *L, node *R){
+        ll newval = 0;
+        l = L;
+        r = R;
+        if(l) newval += l->val;
+        if(r) newval += r->val;
+        val = newval;
+        //cout << newval << endl;
+    }
+};
+ 
+struct segtree{
+    node *roots[200001];
+    int n;
+    int timer = 1;
+    segtree(int N){
+        n = N;
+        roots[1] = new node(0LL);
+    }
+    node *update(node *no,int lo,int hi,int tar,int val){
+        if(lo == hi){
+            return new node(val);
+        }
+        int mid = lo + (hi - lo) / 2;
+        //cout << lo << " " << hi << endl;
+        if(tar <= mid){
+            if(no->l == nullptr){
+                no->l = new node(0LL);
+            }
+            return new node(update(no->l, lo, mid, tar, val), no->r);
+        }else{
+            if(no->r == nullptr){
+                no->r = new node(0LL);
+            }
+            return new node(no->l, update(no->r, mid+1, hi, tar, val));
+        }
+    }
+    void updt(int k, int tar, int val){
+        roots[k] = update(roots[k], 0, n-1, tar, val);
+    }
+ 
+    ll ask(node *no, int lo, int hi, int l, int r){
+        assert(hi >= lo);
+        if(lo == l && hi == r){
+            return no->val;
+        }
+        int mid = lo + (hi - lo) / 2;
+        if(l > mid){
+            if(no->r){
+                return ask(no->r, mid+1, hi, l, r);
+            }else{
+                return 0;
+            }
+        }else if(r <= mid){
+            if(no->l)
+                return ask(no->l, lo, mid, l, r);
+            else
+                return 0;
+        }else{
+            ll newval = 0;
+            if(no->l){
+                newval += ask(no->l, lo, mid, l, mid);
+            }
+            if(no->r){
+                newval += ask(no->r, mid+1, hi, mid+1, r);
+            }
+            return newval;
+        }
+    }
+    void query(int k, int l, int r){
+        cout << ask(roots[k], 0, n-1, l, r) << '\n';
+    }
+    void treecopy(int k){
+        timer++;
+        roots[timer] = new node(roots[k]);
+    }
+};
