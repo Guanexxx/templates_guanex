@@ -1,0 +1,13 @@
+ll binpow(ll b, ll p){
+    ll ans = 1;
+    while(p){
+        if(p & 1){
+            ans *= b;
+        }
+        b *= b;
+        p >>= 1;
+        ans %= mod;
+        b  %= mod;
+    }
+    return ans;
+}
