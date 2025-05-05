@@ -1,31 +1,46 @@
 struct segtree{
-    vector<int> t;
-    int N;
-    segtree(vi &x){
-        N = x.size();
-        t.assign(4 * N, 0);
-        build(0, N-1, 1, x);
+    int n;
+    vi t;
+    segtree(int N){
+        n = N;
+        t.assign(4 * n, 0);
     }
-    void build(int dd, int ht, int no, vi &x){
-        if(dd == ht){
-            t[no] = x[dd];
+
+    void build(int no, int lo, int hi, vi &x){
+        if(lo == hi){
+            t[no] = x[lo];
             return;
         }
-        int m = (dd + ht) / 2;
-        build(dd, m, 2 * no, x);
-        build(m+1, ht, 2 * no + 1, x);
-        t[no] = t[2*no] ^ t[2 * no + 1];
+        int mid = lo + (hi - lo) / 2;
+        build(2*no, lo, mid, x);
+        build(2*no+1, mid+1, hi, x);
+        t[no] = t[2*no] + t[2*no+1];
     }
-    int query(int dd, int ht, int no, int l, int r){
-        if(l == dd && r == ht){
+
+    void update(int no, int lo, int hi, int tar, int val){
+        if(lo == hi){
+            t[no] = val;
+            return;
+        }
+        int mid = lo + (hi  - lo) / 2;
+        if(tar <= mid){
+            update(2*no, lo, mid, tar, val);
+        }else{
+            update(2*no+1, mid+1, hi, tar, val);
+        }
+        t[no] = t[2*no] + t[2*no+1];
+    }
+    int query(int no, int lo, int hi, int l, int r){
+        if(l == lo && r == hi){
             return t[no];
         }
-        int mid = (dd + ht) / 2;
+        int mid = lo + (hi - lo) / 2;
         if(r <= mid){
-            return query(dd, mid, 2 * no, l, r);
+            return query(2*no, lo, mid, l, r);
         }else if(l > mid){
-            return query(mid+1, ht, 2 * no+1, l, r);
+            return query(2*no+1, mid+1, hi, l, r);
+        }else{
+            return query(2*no, lo, mid, l, mid) + query(2*no+1, mid+1, hi, mid+1, r);
         }
-        return query(dd, mid, 2*no, l, mid) ^ query(mid+1, ht, 2*no + 1, mid+1, r);
     }
 };
