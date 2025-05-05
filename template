@@ -4,6 +4,7 @@ using namespace std;
 
 typedef long long ll;
 typedef long double ld;
+#define endl '\n'
 
 //data structures
 
@@ -18,6 +19,9 @@ typedef vector<int> vi;
 typedef vector<string> vs;
 typedef vector<vector<int>> vvi;
 #define pb push_back
+#define pf push_front
+#define popb pop_back
+#define popf pop_front
 #define sz(a) ((int)a.size())
 #define fi first
 #define se second
@@ -30,6 +34,14 @@ typedef vector<vector<int>> vvi;
 #define beg(v) v.begin()
 
 //bit operations
+
+int flip(int x){
+    return ~(x) ^ (1 << 32);
+}
+
+int allon(int x){
+    return (1LL << x) - 1;
+}
 
 bool bit(ll a, ll i){
     return (1LL << i) & a;
@@ -60,7 +72,11 @@ const int inf = int(1e9); // ll inf = ll(1e18);
 
 #define fill(x, y) memset(x, y, sizeof(x))
 
-void read(vector<auto> &x){
+void read(vector<int> &x){
+    for(auto &e:x) cin >> e;
+}
+
+void sread(vector<string> &x){
     for(auto &e:x) cin >> e;
 }
 
@@ -76,8 +92,15 @@ void mread(vector<vector<int>> &p, int nnn, int mmm){
 
 // Solution
 
+void tc(){
+    
+}
+
 int main(){
     ios_base::sync_with_stdio(false);
-    cin.tie(0);
-
+    cin.tie(0); cout.tie(0);
+    int t; cin >> t; // t = 1;
+    while(t--){
+        tc();
+    }
 }
