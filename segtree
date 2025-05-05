@@ -1,9 +1,10 @@
 struct segtree{
     int n;
     vi t;
-    segtree(int N){
-        n = N;
+    segtree(vi &x){
+        n = sz(x);
         t.assign(4 * n, 0);
+        build(1, 0, n-1, x);
     }
 
     void build(int no, int lo, int hi, vi &x){
