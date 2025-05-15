@@ -1,0 +1,132 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+
+//data structures
+
+typedef pair<int, int> ii;
+typedef vector<ii> vii;
+typedef vector<ll> vll;
+typedef vector<ld> vld;
+typedef pair<long long, long long> pll;
+typedef pair<char, int> ci;
+typedef pair<string, int> si;
+typedef vector<int> vi;
+typedef vector<string> vs;
+typedef vector<vector<int>> vvi;
+#define pb push_back
+#define pf push_front
+#define popb pop_back
+#define popf pop_front
+#define sz(a) ((int)a.size())
+#define fi first
+#define se second
+#define whole(v) v.begin(), v.end()
+#define rwhole(v) v.rbegin(), v.rend()
+#define fro front
+#define pqueue priority_queue
+#define ubound upper_bound
+#define lbound lower_bound
+#define beg(v) v.begin()
+
+//bit operations
+
+int flip(int x){
+    return ~(x) ^ (1 << 32);
+}
+
+int allon(int x){
+    return (1LL << x) - 1;
+}
+
+bool bit(ll a, ll i){
+    return (1LL << i) & a;
+}
+
+#define llpc(x) __builtin_popcountll(x)
+#define ipc(x) __builtin_popcount(x)
+#define iclz(x) __builtin_clz(x)
+#define llclz(x) __builtin_clzll(x)
+#define ictz(x) __builtin_ctz(x)
+#define llctz(x) __builtin_ctzll(x)
+
+//answers
+
+#define cYES cout << "YES" << endl
+#define cYes cout << "Yes" << endl
+#define cyes cout << "yes" << endl
+#define cNO cout << "NO" << endl
+#define cNo cout << "No" << endl
+#define cno cout << "no" << endl
+#define ipsb cout << -1 << endl
+
+const ll mod2 = 998244353;
+const ll mod = 1000000007;
+const int inf = int(1e9); // ll inf = ll(1e18);
+
+// read arr vec matr etc
+
+#define fill(x, y) memset(x, y, sizeof(x))
+
+void read(vector<int> &x){
+    for(auto &e:x) cin >> e;
+}
+
+void sread(vector<string> &x){
+    for(auto &e:x) cin >> e;
+}
+
+void mread(vector<vector<int>> &p, int nnn, int mmm){
+    for(int i = 0; i < nnn; ++i){
+        vector<int> pp;
+        for(int j = 0; j < mmm; ++j){
+            int wq; cin >> wq; pp.pb(wq);
+        }
+        p.pb(pp);
+    }
+}
+
+// Solution
+
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); //high quality random number generator using time as seed
+int random(int l, int r){return uniform_int_distribution<int>(l,r)(rng);} //returns a randomb number between [l, r]
+
+void tc(){
+    string tar; cin >> tar;
+    srand(0);
+    string act;
+    int j = 0;
+    ll cnt = 0;
+    ll ten = 10;
+    while(act != tar){
+        cnt++;
+        act.clear();
+        if(cnt == ten){
+            cout << ten << endl;
+            ten *= 10;
+        }
+        for(int i = 0; i < sz(tar); ++i){
+            char newchar = 'a'+ (random(0, 25));
+            act += newchar;
+            if(newchar != tar[i]) break;
+            if(i == j){
+                cout << cnt << " " << act << endl;
+                j++;
+            }
+        }
+    }
+    string end = "end";
+    cout << cnt << " " << end << " " << act << endl;
+}
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
+    int t = 1;
+    while(t--){
+        tc();
+    }
+}
