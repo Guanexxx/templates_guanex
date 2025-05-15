@@ -90,6 +90,9 @@ void mread(vector<vector<int>> &p, int nnn, int mmm){
     }
 }
 
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count()); //high quality random number generator using time as seed
+int random(int l, int r){return uniform_int_distribution<int>(l,r)(rng);} //returns a randomb number between [l, r]
+
 // Solution
 
 void tc(){
