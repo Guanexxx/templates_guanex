@@ -1,0 +1,104 @@
+struct segtree{
+    int n;
+    vll t;
+    vll lset;
+    vll lsum;
+    segtree(vi &x){
+        n = sz(x);
+        t.assign(4*n, 0);
+        lset = t;
+        lsum = t;
+        build(1, 0, n-1, x);
+    }
+    void build(int no, int l, int r, vi &x){
+        if(l == r){
+            t[no] = x[l];
+            return;
+        }
+        int mid = l + (r - l) / 2;
+        build(2*no, l, mid, x);
+        build(2*no+1, mid+1, r, x);
+        t[no] = t[2*no] + t[2*no+1];
+    }
+    void sumapp(int no, int lo, int hi, ll val){
+        t[no] += 1LL * (hi - lo + 1) * val;
+        lsum[no] += val;
+    }
+    void pushsum(int no, int lo, int hi){
+        if(lsum[no] == 0)return;
+        int mid = lo + (hi - lo) / 2;
+        sumapp(2*no, lo, mid, lsum[no]);
+        sumapp(2*no+1, mid+1, hi, lsum[no]);
+        lsum[no] = 0;
+    }   
+    void setapp(int no, int lo, int hi, ll val){
+        t[no] = val * (hi - lo + 1);
+        lsum[no] = 0;
+        lset[no] = val;
+    }
+    void pushset(int no, int lo, int hi){
+        if(lset[no] == 0)return;
+        int mid = lo + (hi - lo) / 2;
+        setapp(2*no, lo, mid, lset[no]);
+        setapp(2*no+1, mid+1, hi, lset[no]);
+        lset[no] = 0;
+    }
+    void sum(int no, int lo, int hi, int l, int r, ll val){
+        assert(lo <= hi);
+        if(lo == l && hi == r){
+            t[no] += 1LL * (hi - lo + 1) * val;
+            lsum[no] += val;
+            return;
+        }
+        int mid = lo + (hi - lo) / 2;
+        pushset(no, lo, hi);
+        pushsum(no, lo, hi);
+        if(r <= mid){
+            sum(2*no, lo, mid, l, r, val);
+        }else if(l > mid){
+            sum(2*no+1, mid+1, hi, l, r, val);
+        }else{
+            sum(2*no, lo, mid, l, mid, val);
+            sum(2*no+1, mid+1, hi, mid+1, r, val);
+        }
+        t[no] = t[2*no] + t[2*no+1];
+    }
+    void set(int no, int lo, int hi, int l, int r, ll val){
+        assert(lo <= hi);
+        if(lo == l && hi == r){
+            t[no] = val * (hi - lo + 1);
+            lsum[no] = 0;
+            lset[no] = val;
+            return;
+        }
+        int mid = lo + (hi - lo) / 2;
+        pushset(no, lo, hi);
+        pushsum(no, lo, hi);
+        if(r <= mid){
+            set(2*no, lo, mid, l, r, val);
+        }else if(l > mid){
+            set(2*no+1, mid+1, hi, l, r, val);
+        }else{
+            set(2*no, lo, mid, l, mid, val);
+            set(2*no+1, mid+1, hi, mid+1, r, val);
+        }
+        t[no] = t[2*no] + t[2*no+1];
+    }
+    ll query(int no, int lo, int hi, int l, int r){
+        //cout << no << " " << lo << " " << hi << " " << l <<  " " << r << endl;
+        assert(no < sz(t));
+        if(lo == l && hi == r){
+            return t[no];
+        }
+        int mid = lo + (hi - lo) / 2;
+        pushset(no, lo, hi);
+        pushsum(no, lo, hi);
+        if(r <= mid){
+            return query(2*no, lo, mid, l, r);
+        }else if(l > mid){
+            return query(2*no+1, mid+1, hi, l, r);
+        }else{
+            return query(2*no, lo, mid, l, mid) + query(2*no+1, mid+1, hi, mid+1, r);
+        }
+    }
+};
